@@ -1,0 +1,14 @@
+
+# py chache 파일, note checkpoints 파일.
+*.log
+*-checkpoint.ipynb
+.ipynb_checkpoints/
+*.pyc
+__pycache__/
+
+#문서파일
+*.pptx
+#데이터 파일
+DATA/
+*.dcm
+*.jpg
