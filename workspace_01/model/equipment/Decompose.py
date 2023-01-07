@@ -37,9 +37,9 @@ class series_decomp(nn.Module):
         self.moving_avg = moving_avg(kernel_size, stride=1)
 
     def forward(self, x):
-        moving_mean = self.moving_avg(x)
-        res = x - moving_mean
-        return res, moving_mean
+        trend = self.moving_avg(x)
+        res = x - trend
+        return res, trend
 
 
 class series_decomp_multi(nn.Module):
@@ -57,13 +57,7 @@ class series_decomp_multi(nn.Module):
             moving_avg = func(x)
             moving_mean.append(moving_avg.unsqueeze(-1))
         moving_mean=torch.cat(moving_mean,dim=-1)
-        moving_mean = torch.sum(moving_mean*nn.Softmax(-1)(self.layer(x.unsqueeze(-1))),dim=-1)
-        res = x - moving_mean
-        return res, moving_mean 
+        trend_mean = torch.sum(moving_mean*nn.Softmax(-1)(self.layer(x.unsqueeze(-1))),dim=-1)
+        freq = x - trend_mean
+        return freq, trend_mean 
 
-# self.kernel_size = configs.moving_avg
-
-# if isinstance(self.kernel_size, list):
-#     self.decomposition = series_decomp_multi(self.kernel_size)
-# else:
-#     self.decomposition = series_decomp(self.kernel_size)
