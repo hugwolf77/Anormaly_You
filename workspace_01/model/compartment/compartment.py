@@ -1,10 +1,9 @@
-
 import torch.nn as nn
-import compartment
 
-class Linear_compartment(compartment):
+
+class compartment(nn.Module):
     def __init__(self, input_dim, output_dim, dropout) -> None:
-        super(Linear_compartment,self).__init__()
+        super(compartment,self).__init__()
         self.input_dim = input_dim
         self.output_dim = output_dim
         

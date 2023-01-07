@@ -1,7 +1,8 @@
 
 import torch.nn as nn
+import compartment
 
-class Rnn_compartment(nn.Module):
+class Rnn_compartment(compartment):
     def __init__(self, input_dim, hid_dim, n_layers, dropout) -> None:
         super(Rnn_compartment,self).__init__()
         self.hid_dim = hid_dim
