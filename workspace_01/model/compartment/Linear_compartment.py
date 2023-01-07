@@ -12,4 +12,4 @@ class Linear_compartment(nn.Module):
         
     def forward(self, input_x):
         x1 = self.Linear(input_x)
-        return 
+        return x1
