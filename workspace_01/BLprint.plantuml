@@ -1,0 +1,84 @@
+
+
+@startuml TS-Abnormaly-Detection
+
+scale 1.0
+title TimeSeries Abnormaly Detection Model
+
+package "TSMS: Train Control and Monitoring System" #d1b5f5 {
+    package "ControlCentor" #6cc3f5 {
+        package "Operation" #fff9a6 {
+        
+        }
+        
+    }
+
+    package "utils" #6cc3f5 {
+        class masking
+        class metrics 
+        class timefeatures 
+        class tools
+    }
+    package "data_provider" #6cc3f5 {
+        class data_factory { 
+            +data_provider()
+            data_dict : Dataset_Custom
+            } 
+        package "data_loader" #fff9a6 {
+            data_factory --|> Dataset_Custom : torch-Dataset
+            data_factory --|> Dataset_Pred : torch-Dataset
+        masking --* Dataset_Custom
+        timefeatures --* Dataset_Custom
+        masking --* Dataset_Pred
+        timefeatures --* Dataset_Pred
+        }
+    }
+}
+
+package "model: Train Plant" #6cc3f5 {
+
+    class combine_Train{
+        class model
+    }
+
+    package "compartmnet" #fff9a6 {
+        class compartment
+        abstract class Linear_compartment
+        abstract class Rnn_compartment
+
+        compartment --|> Linear_compartment
+        compartment --|> Rnn_compartment
+
+    }
+    package "equipment" #fff9a6 {
+        class Chain_coupler {
+            + Coupler()
+            + Adjust_seq()
+            + Adjust_count_compartment()
+            +Set_DataOrder()
+        } 
+        Linear_compartment --* Chain_coupler
+        Rnn_compartment --* Chain_coupler
+        Chain_coupler .. data_factory
+        Chain_coupler --* combine_Train
+
+        package "Decompose" #c3f5bf {
+            class moving_avg{}
+            class series_decomp{}
+            class series_decomp_multi{}
+
+            moving_avg --* series_decomp
+            moving_avg --* series_decomp_multi
+            series_decomp --* combine_Train
+            series_decomp_multi --* combine_Train
+        }
+        class RInsNorm{
+            +Activate_InsNorm
+            +Deactivate_InsNorm
+        }
+        RInsNorm --* combine_Train
+
+    }
+}
+
+@enduml
