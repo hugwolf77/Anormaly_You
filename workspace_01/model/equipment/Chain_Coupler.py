@@ -9,10 +9,9 @@ class Coupler(nn.Module):
         
     def Coupler(self):
         pass
-    def Adjust_seq(self):
+    def Set_Adjust_seq(self):
         pass
-    def Adjust_count_compartment(self):
+    def Set_Adjust_count_compartment(self):
         pass
-    
     def Set_DataOrder(self):
         pass

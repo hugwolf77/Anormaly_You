@@ -1,5 +1,4 @@
 
-
 @startuml TS-Abnormaly-Detection
 
 scale 1.0
@@ -7,10 +6,36 @@ title TimeSeries Abnormaly Detection Model
 
 package "TSMS: Train Control and Monitoring System" #d1b5f5 {
     package "ControlCentor" #6cc3f5 {
-        package "Operation" #fff9a6 {
-        
+        package "OperationCenter" #fff9a6 {
+            class Exp_Basic
+            abstract class Exp_Main {
+                - _build_model()
+                - _get_data()
+                - _select_optimizer()
+                - _select_criterion()
+                +vali()
+                +train()
+                +test()
+                +predict()
+            }
+            Exp_Basic --|> Exp_Main
         }
-        
+        package "InfoCenter" #fff9a6 {
+            class Analysis_Adjust_seq
+            class Analysis_Adjust_count_compartment
+            Analysis_Adjust_seq *-- Exp_Main
+            Analysis_Adjust_count_compartment *--Exp_Main
+        }
+        package "InfoFormat" #fff9a6 {
+            class arguments
+            class Analysis_Result
+            class Analysis_Adjust
+
+            arguments --* Exp_Main
+            Analysis_Result *-- Exp_Main
+            Analysis_Adjust *-- Analysis_Adjust_seq
+            Analysis_Adjust *-- Analysis_Adjust_count_compartment
+        }
     }
 
     package "utils" #6cc3f5 {
@@ -18,6 +43,9 @@ package "TSMS: Train Control and Monitoring System" #d1b5f5 {
         class metrics 
         class timefeatures 
         class tools
+
+        metrics --* Exp_Main
+        tools --* Exp_Main
     }
     package "data_provider" #6cc3f5 {
         class data_factory { 
@@ -25,14 +53,18 @@ package "TSMS: Train Control and Monitoring System" #d1b5f5 {
             data_dict : Dataset_Custom
             } 
         package "data_loader" #fff9a6 {
-            data_factory --|> Dataset_Custom : torch-Dataset
-            data_factory --|> Dataset_Pred : torch-Dataset
+            class Dataset_Custom
+            class Dataset_Pred
+        data_factory --|> Dataset_Custom : torch-Dataset
+        data_factory --|> Dataset_Pred : torch-Dataset
         masking --* Dataset_Custom
         timefeatures --* Dataset_Custom
         masking --* Dataset_Pred
         timefeatures --* Dataset_Pred
         }
+        data_loader --* Exp_Main
     }
+
 }
 
 package "model: Train Plant" #6cc3f5 {
@@ -40,6 +72,8 @@ package "model: Train Plant" #6cc3f5 {
     class combine_Train{
         class model
     }
+    
+    combine_Train --* Exp_Main
 
     package "compartmnet" #fff9a6 {
         class compartment
@@ -53,13 +87,13 @@ package "model: Train Plant" #6cc3f5 {
     package "equipment" #fff9a6 {
         class Chain_coupler {
             + Coupler()
-            + Adjust_seq()
-            + Adjust_count_compartment()
-            +Set_DataOrder()
+            + Set_Adjust_seq()
+            + Set_Adjust_count_compartment()
+            + Set_DataOrder()
         } 
         Linear_compartment --* Chain_coupler
         Rnn_compartment --* Chain_coupler
-        Chain_coupler .. data_factory
+        Chain_coupler --* data_factory
         Chain_coupler --* combine_Train
 
         package "Decompose" #c3f5bf {
@@ -77,8 +111,16 @@ package "model: Train Plant" #6cc3f5 {
             +Deactivate_InsNorm
         }
         RInsNorm --* combine_Train
-
     }
+}
+
+package "main : Report" #6cc3f5 {
+    class Report
+    class excute
+
+    excute *-- Exp_Main
+    Report *-- InfoFormat
+
 }
 
 @enduml
