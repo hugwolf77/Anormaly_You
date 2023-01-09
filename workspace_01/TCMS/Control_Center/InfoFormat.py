@@ -55,8 +55,8 @@ class args:
     test_flop : bool           # False    
 
 @dataclass(frozen=True)
-class TS_DATA:
-    # base info
+class Analysis_Result:
+        # base info
     Id : int
     ob_measure_id : str
     ob_division : str
@@ -77,3 +77,8 @@ class TS_DATA:
     RSE : float
     CORR : float
     plot : bool = False
+
+@dataclass
+class Analysis_Adjust:
+    pass
+

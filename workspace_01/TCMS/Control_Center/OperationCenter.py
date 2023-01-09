@@ -15,7 +15,7 @@ from model import Combine_Train
 from utils.tools import EarlyStopping, adjust_learning_rate, visual, test_params_flop
 from utils.metrics import metric
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 warnings.filterwarnings('ignore')
 
@@ -37,7 +37,7 @@ class Exp_Main(Exp_Basic):
         return model
 
     def _get_data(self, flag):
-        data_set, data_loader = data_provider_wq(self.args, flag)
+        data_set, data_loader = data_provider(self.args, flag)
         return data_set, data_loader
 
     def _select_optimizer(self):

@@ -17,3 +17,6 @@ DATA/
 
 #xohyun Dir
 xohyun/
+
+# edit code bak
+*.bak_py
