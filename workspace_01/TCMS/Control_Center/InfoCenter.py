@@ -1,11 +1,12 @@
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-from  InfoFormat import args, Analysis_Result, Analysys_Adjust
+from  InfoFormat import args, Analysis_Result, Analysis_Adjust, Model_Train_Info
 
 class InforCenter:
     def __init__(self) -> None:
-       pass 
+    #    self.configs  = configparser()
+        pass
     
     def Analysis_Adjust_seq(self):
         pass
@@ -29,4 +30,7 @@ class InforCenter:
         pass
     
     def Set_Analysis_Adjust(self):
+        pass
+    
+    def State_Update(self):
         pass
