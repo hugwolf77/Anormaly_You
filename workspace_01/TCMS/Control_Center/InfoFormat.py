@@ -1,6 +1,7 @@
 
 from datetime import date, datetime
 from dataclasses import dataclass, field
+import numpy as np
 
 @dataclass
 class args:
@@ -81,4 +82,22 @@ class Analysis_Result:
 @dataclass
 class Analysis_Adjust:
     pass
+
+
+@dataclass(frozen=True)
+class Model_Train_Info:
+    
+    train_origin_input : np.ndarray
+    validation_origin_input : np.ndarray
+    test_origin_input : np.ndarray
+    
+    train_reconst_out : np.ndarray
+    validation_reconst_out : np.ndarray
+    test_reconst_out : np.ndarray
+    
+    train_loss : float
+    validation_loss : float
+    test_loss : float
+    
+    compartment_diff_vec : np.ndarray
 
